@@ -1,0 +1,39 @@
+:root
+  // gaps
+  --indent: 5px
+  --outer-indent: -1px
+  // borders
+  --border-radius: 6px
+  --border-width: 1px
+  // colors
+  --border-color: #333
+  --black-color: #000
+  --text-color: #fff
+  --main-bg-color: #212121
+  --field-bg-color: #6666FF
+  --field-bg-color-hover: #8888FF
+  --flag-bg-color: lightgray
+  // fonts
+  --font-family: Arial, sans-serif
+  --font-size: 16px
+  // other
+  --animation-time: 0.5s
+
+*,
+*::before,
+*::after
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+  font-family: var(--font-family)
+
+html, body
+  height: 100vh
+
+body
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  padding: calc(4 * var(--indent))
+  background-color: var(--main-bg-color)

@@ -1,0 +1,100 @@
+.title
+  color: var(--text-color)
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  pointer-events: none
+
+.canvas
+  display: none
+  border-radius: var(--border-radius)
+
+.canvas-container
+  position: relative
+  border-radius: var(--border-radius)
+  margin-top: var(--indent)
+  border: var(--border-width) solid var(--border-color)
+
+.button
+  padding: calc(2 * var(--indent)) calc(3 * var(--indent))
+  margin: 0
+  border: var(--border-width) solid transparent
+  border-radius: var(--border-radius)
+  font-size: var(--font-size)
+  background-color: transparent
+  cursor: pointer
+  background-color: var(--field-bg-color)
+  color: var(--text-color)
+  transition: background-color var(--animation-time) ease
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+
+  &:hover 
+    background-color: var(--field-bg-color-hover)
+
+.start-game
+  margin-top: calc(2 * var(--indent))
+
+.select-level
+  margin-top: calc(2 * var(--indent))
+
+.game
+  display: none
+  flex-direction: column
+  align-items: center
+  color: var(--text-color)
+  font-size: var(--font-size)
+
+  &__count-bomb,
+  &__timer
+    margin-top: var(--indent)
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+    pointer-events: none
+
+.result-container
+  display: none
+  position: absolute
+  top: var(--outer-indent)
+  left: var(--outer-indent)
+  right: var(--outer-indent)
+  bottom: var(--outer-indent)
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  border-radius: var(--border-radius)
+
+  &--is-visible
+    background-color: rgba(#000, 0.5)
+    transition: background-color var(--animation-time) ease
+
+.win-container
+  display: none
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  margin-bottom: calc(2 * var(--indent))
+
+.hints
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  position: absolute
+  top: calc(7 * var(--indent) * -1)
+  right: 0
+  font-size: calc(var(--font-size) - 4px)
+  -webkit-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  pointer-events: none
+
+.best-level-time
+  display: none
+  color: var(--text-color)
+  margin-top: var(--indent)
