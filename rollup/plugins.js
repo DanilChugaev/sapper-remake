@@ -1,4 +1,4 @@
-import typescript from '@rollup/plugin-typescript';
+// import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import alias from '@rollup/plugin-alias';
@@ -11,6 +11,8 @@ import copy from 'rollup-plugin-copy';
 
 import html from '@web/rollup-plugin-html';
 import autoprefixer from 'autoprefixer';
+import ts from 'rollup-plugin-ts';
+import { di } from '@wessberg/di-compiler';
 
 import { DIST_DIR, APP_DIR, isDev, isNeedOpenStats } from './utils';
 
@@ -27,8 +29,11 @@ export default [
   }),
 
   /** passing applications through the typescript compiler */
-  typescript({
-    tsconfig: './tsconfig.json',
+  // typescript({
+  //   tsconfig: './tsconfig.json',
+  // }),
+  ts({
+    transformers: [ di ],
   }),
 
   /** convert CommonJS modules to ES6, so they can be included in a Rollup bundle */
@@ -66,9 +71,14 @@ export default [
   /** copy files and folders */
   copy({
     targets: [
+      // TODO: поправить в движке указание пути
       {
         src: `${APP_DIR}/images/*`,
         dest: `${DIST_DIR}/images`,
+      },
+      {
+        src: `${APP_DIR}/img/*`,
+        dest: `${DIST_DIR}/img`,
       },
     ],
   }),
