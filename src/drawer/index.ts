@@ -5,21 +5,22 @@ import { SourceInterface } from 'just-engine/src/source/types';
 import { GameSettings } from '../settings/types';
 
 import { DrawerInterface } from './types';
+import { ERROR_CONTEXT_ACCESS_MESSAGE, ERROR_COLORS_ACCESS_MESSAGE } from './constants';
 
 
 /** Class implements painting on canvas */
 export class DrawerClass implements DrawerInterface {
   /** Canvas 2d context */
-  private context: CanvasContext = null;
+  private _context: CanvasContext;
 
   /** Bomb image */
-  private bomb: CanvasImageSource;
+  private _bomb: CanvasImageSource;
 
   /** Flag image */
-  private flag: CanvasImageSource;
+  private _flag: CanvasImageSource;
 
   /** Color variables from custom properties */
-  private colors: CustomProperties;
+  private _colors: CustomProperties;
 
   /**
    * @param contextInstance - provides the context of the canvas
@@ -34,15 +35,15 @@ export class DrawerClass implements DrawerInterface {
     private settings: GameSettings,
   ) {
     this.contextInstance.init(this.settings.canvasSize, this.settings.devicePixelRatio);
-    this.context = this.contextInstance.getInstance();
+    this._context = this.contextInstance.getInstance();
 
-    if (!this.context) {
-      throw new Error('Failed to access the drawing context.');
+    if (!this._context) {
+      throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }
 
-    this.bomb = this.sourceInstance.getImage('bomb');
-    this.flag = this.sourceInstance.getImage('flag');
-    this.colors = this.uiInstance.getColors;
+    this._bomb = this.sourceInstance.getImage('bomb');
+    this._flag = this.sourceInstance.getImage('flag');
+    this._colors = this.uiInstance.getColors;
   }
 
   /**
@@ -56,15 +57,15 @@ export class DrawerClass implements DrawerInterface {
    * @param hasBorders - whether to draw borders at a square
    */
   public drawSquare({ x, y }: Cell, size: PixelsAmount, color: string, hasBorders = true): void {
-    if (!this.context) {
-      return;
+    if (!this._context) {
+      throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }
 
-    this.context.fillStyle = color;
-    this.context.fillRect(x, y, size, size);
+    this._context.fillStyle = color;
+    this._context.fillRect(x, y, size, size);
 
     if (hasBorders) {
-      this.drawBorders({ x, y }, size);
+      this._drawBorders({ x, y }, size);
     }
   }
 
@@ -78,14 +79,22 @@ export class DrawerClass implements DrawerInterface {
    * @param value - number to draw
    */
   public drawNumber({ x, y }: Cell, size: PixelsAmount, value: number): void {
-    this.drawSquare({ x, y }, size, this.colors.MAIN_BG_COLOR);
+    if (!this._context) {
+      throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
+    }
+
+    if (!this._colors) {
+      throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
+    }
+
+    this.drawSquare({ x, y }, size, this._colors.MAIN_BG_COLOR);
 
     /** font size should be less than the size of the square */
-    this.context.font = `${size / 2}px ${this.uiInstance.getFont}`;
-    this.context.fillStyle = this.colors.TEXT_COLOR;
+    this._context.font = `${size / 2}px ${this.uiInstance.getFont}`;
+    this._context.fillStyle = this._colors.TEXT_COLOR;
 
     /** since the number is stretched upwards, for centering, we divide the width by a larger number than the height */
-    this.context.fillText(value.toString(), x + (size / 2.5), y + (size / 1.5));
+    this._context.fillText(value.toString(), x + (size / 2.5), y + (size / 1.5));
   }
 
   /**
@@ -97,11 +106,19 @@ export class DrawerClass implements DrawerInterface {
    * @param size - square size in pixels
    */
   public drawBomb({ x, y }: Cell, size: PixelsAmount): void {
-    this.drawSquare({ x, y }, size, this.colors.FIELD_BG_COLOR, false);
+    if (!this._context) {
+      throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
+    }
 
-    const imageSize: number = this.getImageSize(size);
+    if (!this._colors) {
+      throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
+    }
 
-    this.context.drawImage(this.bomb, this.getImageCoord(x, size), this.getImageCoord(y, size), imageSize, imageSize);
+    this.drawSquare({ x, y }, size, this._colors.FIELD_BG_COLOR, false);
+
+    const imageSize: number = this._getImageSize(size);
+
+    this._context.drawImage(this._bomb, this._getImageCoord(x, size), this._getImageCoord(y, size), imageSize, imageSize);
   }
 
   /**
@@ -113,11 +130,19 @@ export class DrawerClass implements DrawerInterface {
    * @param size - square size in pixels
    */
   public drawFlag({ x, y }: Cell, size: PixelsAmount): void {
-    this.drawSquare({ x, y }, size, this.colors.FLAG_BG_COLOR, false);
+    if (!this._context) {
+      throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
+    }
 
-    const imageSize: number = this.getImageSize(size);
+    if (!this._colors) {
+      throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
+    }
 
-    this.context.drawImage(this.flag, this.getImageCoord(x, size), this.getImageCoord(y, size), imageSize, imageSize);
+    this.drawSquare({ x, y }, size, this._colors.FLAG_BG_COLOR, false);
+
+    const imageSize: number = this._getImageSize(size);
+
+    this._context.drawImage(this._flag, this._getImageCoord(x, size), this._getImageCoord(y, size), imageSize, imageSize);
   }
 
   /**
@@ -125,7 +150,7 @@ export class DrawerClass implements DrawerInterface {
    *
    * @param size - square size in pixels
    */
-  private getImageSize(size: number): number {
+  private _getImageSize(size: number): number {
     return size / 2;
   }
 
@@ -135,7 +160,7 @@ export class DrawerClass implements DrawerInterface {
    * @param cellCoord - x or y coordinate of cell
    * @param size - square size in pixels
    */
-  private getImageCoord(cellCoord: number, size: number): number {
+  private _getImageCoord(cellCoord: number, size: number): number {
     return cellCoord + (size / 4);
   }
 
@@ -147,8 +172,16 @@ export class DrawerClass implements DrawerInterface {
    * @param cell.y - cell y coordinate
    * @param size - square size in pixels
    */
-  private drawBorders({ x, y }: Cell, size: PixelsAmount): void {
-    this.context.strokeStyle = this.colors.BORDER_COLOR;
-    this.context.strokeRect(x, y, size, size);
+  private _drawBorders({ x, y }: Cell, size: PixelsAmount): void {
+    if (!this._context) {
+      throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
+    }
+
+    if (!this._colors) {
+      throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
+    }
+
+    this._context.strokeStyle = this._colors.BORDER_COLOR;
+    this._context.strokeRect(x, y, size, size);
   }
 }

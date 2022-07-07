@@ -1,5 +1,3 @@
-import { AreaStructure } from './types';
-
 /**
  * Coordinates of neighboring cells relative to the center cell
  *
@@ -18,3 +16,5 @@ export const AREA_STRUCTURE: AreaStructure = {
   6: { x: -1, y:  1 },
   7: { x: -1, y:  0 },
 };
+
+export const COUNT_OF_CELLS_AROUND_CENTRAL = 8;

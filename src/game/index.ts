@@ -8,62 +8,63 @@ import { MathInterface } from 'just-engine/src/math/types';
 import { DrawerInterface } from '../drawer/types';
 import { GameSettings } from '../settings/types';
 import { MapStructure, BuilderInterface } from '../builder/types';
+import { ERROR_COLORS_ACCESS_MESSAGE } from '../drawer/constants';
 
 import { GameInterface } from './types';
+import { ERROR_SYSTEM_ACCESS_MESSAGE } from './constants';
 
 /** The main class of the game */
 export class Sapper implements GameInterface {
     /** HTML select for choice of difficulty level */
-    private select: Nullable<HTMLSelectElement> = null;
+    private _select: HTMLSelectElement;
 
     /** HTML button for start game */
-    private startGameButton: Nullable<HTMLElement> = null;
+    private _startGameButton: HTMLButtonElement;
 
-     /** Container for best level time */
-     private levelTime: Nullable<HTMLElement> = null;
+    /** Container for best level time */
+    private _levelTime: HTMLElement;
 
     /** To display best level time before the game */
-    private bestLevelTime: Nullable<HTMLElement> = null;
+    private _bestLevelTime: HTMLElement;
 
     /** Element on which the game will be drawn */
-    private canvas: Nullable<HTMLElement> = null;
+    private _canvas: HTMLCanvasElement;
 
     /** Container for fields and other containers */
-    private gameContainer: Nullable<HTMLElement> = null;
+    private _gameContainer: HTMLElement;
 
     /** To display the results of the game */
-    private resultContainer: Nullable<HTMLElement> = null;
+    private _resultContainer: HTMLElement;
 
     /** Container for current time and best time of the game */
-    private winContainer: Nullable<HTMLElement> = null;
+    private _winContainer: HTMLElement;
 
     /** To display the remaining number of bombs */
-    private leftBombContainer: Nullable<HTMLElement> = null;
+    private _leftBombContainer: HTMLElement;
 
     /** to display the time since the start of the game */
-    private timerContainer: Nullable<HTMLElement> = null;
+    private _timerContainer: HTMLElement;
 
     /** Container for current time of the game in win container */
-    private currentTimeContainer: Nullable<HTMLElement> = null;
+    private _currentTimeContainer: HTMLElement;
 
     /** Container for best time of the game in win container */
-    private bestTimeContainer: Nullable<HTMLElement> = null;
+    private _bestTimeContainer: HTMLElement;
 
     /** Structure of the field of the selected level of difficulty */
-    private system: MapStructure;
+    private _system: Nullable<MapStructure> = null;
 
     /** Cell size in pixels */
-    private cellPixelsSize: PixelsAmount;
+    private _cellPixelsSize: PixelsAmount = 0;
 
     /** Timer for counting time */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private timerInterval: any; // todo: fix type
+    private _timerInterval: any; // TODO: fix type
 
     /** Number of correctly allocated bombs */
-    private countCorrectlySelectedBombs = 0;
+    private _countCorrectlySelectedBombs = 0;
 
     /** Color variables from custom properties */
-    private colors: CustomProperties;
+    private _colors: CustomProperties;
 
     /**
      * @param settings - basic game settings
@@ -85,19 +86,19 @@ export class Sapper implements GameInterface {
         private storageInstance: StorageInterface,
         private uiInstance: UIInterface,
     ) {
-      this.select = <HTMLSelectElement>domInstance.getElement('select-level');
-      this.startGameButton = domInstance.getElement('start-game');
-      this.levelTime = domInstance.getElement('level-time');
-      this.bestLevelTime = domInstance.getElement('best-level-time');
-      this.canvas = domInstance.getElement('canvas');
-      this.gameContainer = domInstance.getElement('game-container');
-      this.resultContainer = domInstance.getElement('result-container');
-      this.winContainer = domInstance.getElement('win-container');
-      this.leftBombContainer = domInstance.getElement('left-bomb');
-      this.timerContainer = domInstance.getElement('timer');
-      this.currentTimeContainer = domInstance.getElement('current-time-container');
-      this.bestTimeContainer = domInstance.getElement('best-time-container');
-      this.colors = this.uiInstance.getColors;
+      this._select = <HTMLSelectElement> domInstance.getElement('select-level');
+      this._startGameButton = <HTMLButtonElement> domInstance.getElement('start-game');
+      this._levelTime = <HTMLElement> domInstance.getElement('level-time');
+      this._bestLevelTime = <HTMLElement> domInstance.getElement('best-level-time');
+      this._canvas = <HTMLCanvasElement> domInstance.getElement('canvas');
+      this._gameContainer = <HTMLElement> domInstance.getElement('game-container');
+      this._resultContainer = <HTMLElement> domInstance.getElement('result-container');
+      this._winContainer = <HTMLElement> domInstance.getElement('win-container');
+      this._leftBombContainer = <HTMLElement> domInstance.getElement('left-bomb');
+      this._timerContainer = <HTMLElement> domInstance.getElement('timer');
+      this._currentTimeContainer = <HTMLElement> domInstance.getElement('current-time-container');
+      this._bestTimeContainer = <HTMLElement> domInstance.getElement('best-time-container');
+      this._colors = this.uiInstance.getColors;
 
       this.contextInstance.init(this.settings.canvasSize, this.settings.devicePixelRatio);
     }
@@ -108,53 +109,52 @@ export class Sapper implements GameInterface {
         const selectedLevel = this.storageInstance.get('level') || 'easy';
 
         /** if we have previously selected the level, then set it again */
-        this.changeLevelInSettings(selectedLevel);
+        this._changeLevelInSettings(selectedLevel);
 
         for (const key in this.settings.levels) {
           const option = <HTMLOptionElement> this.domInstance.createElement('option');
 
           option.textContent = key;
           option.value = key;
-          // @ts-ignore
           option.selected = this.settings.levels[key].selected;
 
           /** substitute the selection options into the select from the settings */
-          this.select.appendChild(option);
+          this._select.appendChild(option);
         }
 
-        this.select.addEventListener('change', this.changeLevel.bind(this), false);
+        this._select.addEventListener('change', this._changeLevel.bind(this), false);
 
-        this.startGameButton.addEventListener('click', this.start.bind(this), false);
+        this._startGameButton.addEventListener('click', this._start.bind(this), false);
       });
     }
 
     /** Generate level and start the game */
-    private start(): void {
-      this.system = this.builderInstance.build(this.settings);
-      this.cellPixelsSize = this.system.pixelsCountInCell;
+    private _start(): void {
+      this._system = this.builderInstance.build(this.settings);
+      this._cellPixelsSize = this._system.pixelsCountInCell;
 
       // display bombs left and timer above the field
-      this.leftBombContainer.textContent = this.system.bombLeft.toString();
-      this.timerContainer.textContent = '0';
+      this._leftBombContainer.textContent = this._system.bombLeft.toString();
+      this._timerContainer.textContent = '0';
 
-      this.changeVisibilityElements();
-      this.makeInitialFill();
-      this.startTimer();
+      this._changeVisibilityElements();
+      this._makeInitialFill();
+      this._startTimer();
 
-      this.contextInstance.listenCanvasClick(this.checkClick.bind(this));
-      this.contextInstance.listenCanvasContextMenu(this.checkRightButtonClick.bind(this));
+      this.contextInstance.listenCanvasClick(this._checkClick.bind(this));
+      this.contextInstance.listenCanvasContextMenu(this._checkRightButtonClick.bind(this));
     }
 
     /** Start timer for counting the level time (in seconds) */
-    private startTimer(): void {
+    private _startTimer(): void {
       let seconds = 0;
 
       // display the current time above the field
-      this.timerContainer.textContent = String(seconds++);
+      this._timerContainer.textContent = String(seconds++);
 
       // update the timer once per second
-      this.timerInterval = setInterval(() => {
-        this.timerContainer.textContent = String(seconds++);
+      this._timerInterval = setInterval(() => {
+        this._timerContainer.textContent = String(seconds++);
       }, 1000);
     }
 
@@ -163,23 +163,23 @@ export class Sapper implements GameInterface {
      *
      * @param isWin - true, if the game ends with a win
      */
-    private stopTimer(isWin: boolean): void {
-      clearInterval(this.timerInterval);
+    private _stopTimer(isWin: boolean): void {
+      clearInterval(this._timerInterval);
 
       if (isWin) {
-        const currentTime = this.timerContainer.textContent;
+        const currentTime = this._timerContainer.textContent;
         const currentLevel = this.storageInstance.get('level');
         const bestTimeStorageName = `best-time-${currentLevel}`;
         const bestTime = this.storageInstance.get(bestTimeStorageName);
         let time = '';
 
         // display current time on the finish screen
-        this.currentTimeContainer.textContent = currentTime;
+        this._currentTimeContainer.textContent = currentTime;
 
         if (bestTime && Number(bestTime) < Number(currentTime)) {
           time = bestTime;
         } else {
-          time = currentTime;
+          time = (currentTime as string);
         }
 
         this.storageInstance.save({
@@ -188,7 +188,7 @@ export class Sapper implements GameInterface {
         });
 
         // display best time on the finish screen
-        this.bestTimeContainer.textContent = time;
+        this._bestTimeContainer.textContent = time;
       }
     }
 
@@ -197,14 +197,12 @@ export class Sapper implements GameInterface {
      *
      *  @param event - DOM event
      */
-    private changeLevel(event: Event): void {
-      // @ts-ignore
-      this.changeLevelInSettings(event.target.value);
+    private _changeLevel(event: Event): void {
+      this._changeLevelInSettings((event.target as HTMLSelectElement).value);
 
       this.storageInstance.save({
         name: 'level',
-        // @ts-ignore
-        value: event.target.value,
+        value: (event.target as HTMLSelectElement).value,
       });
     }
 
@@ -213,15 +211,15 @@ export class Sapper implements GameInterface {
      *
      * @param selectedLevel - nama of selected level
      */
-    private changeLevelInSettings(selectedLevel: string): void {
+    private _changeLevelInSettings(selectedLevel: string): void {
       const bestTime = this.storageInstance.get(`best-time-${selectedLevel}`);
 
       // if the level was passed earlier, then display its best time on the start screen
       if (bestTime) {
-        this.levelTime.style.display = 'block';
-        this.bestLevelTime.textContent = bestTime;
+        this._levelTime.style.display = 'block';
+        this._bestLevelTime.textContent = bestTime;
       } else {
-        this.levelTime.style.display = 'none';
+        this._levelTime.style.display = 'none';
       }
 
       for (const key in this.settings.levels) {
@@ -234,22 +232,26 @@ export class Sapper implements GameInterface {
     }
 
     /** Changes visibility of game elements on the page after start of the game */
-    private changeVisibilityElements(): void {
-      this.startGameButton.style.display = 'none';
-      this.select.style.display = 'none';
-      this.levelTime.style.display = 'none';
-      this.gameContainer.style.display = 'flex';
-      this.canvas.style.display = 'block';
+    private _changeVisibilityElements(): void {
+      this._startGameButton.style.display = 'none';
+      this._select.style.display = 'none';
+      this._levelTime.style.display = 'none';
+      this._gameContainer.style.display = 'flex';
+      this._canvas.style.display = 'block';
     }
 
     /** Fills the entire canvas by default with the default color */
-    private makeInitialFill(): void {
+    private _makeInitialFill(): void {
+      if (!this._colors) {
+        throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
+      }
+
       const size: PixelsAmount = this.settings.canvasSize;
 
       this.drawerInstance.drawSquare({
         x: 0,
         y: 0,
-      }, size, this.colors.FIELD_BG_COLOR);
+      }, size, this._colors.FIELD_BG_COLOR);
     }
 
     /**
@@ -259,23 +261,23 @@ export class Sapper implements GameInterface {
      * @param mouseEvent.offsetX - offset of the mouse cursor along the X axis from the edge of the canvas
      * @param mouseEvent.offsetY - offset of the mouse cursor along the Y axis from the edge of the canvas
      */
-    private checkClick({ offsetX, offsetY }: MouseEvent): void {
-      const cell = this.getCell(offsetX, offsetY);
+    private _checkClick({ offsetX, offsetY }: MouseEvent): void {
+      const cell = this._getCell(offsetX, offsetY);
 
       // to click on the cell with the flag - first you need to remove it
       if (!cell.hasFlag) {
         if (cell.hasBomb) {
-          this.openBombCell(cell); // draw a bomb in the specified cell
-          this.openAllBombs(); // draw all the other bombs
-          this.stopGame(); // stop the game
+          this._openBombCell(cell); // draw a bomb in the specified cell
+          this._openAllBombs(); // draw all the other bombs
+          this._stopGame(); // stop the game
         } else if (cell.value !== 0) {
-          this.openNumberSquare(cell); // draw a cell with a number
+          this._openNumberSquare(cell); // draw a cell with a number
         } else {
-          this.openEmptySquare(cell); // draw an empty cell
-          this.recursiveOpenArea(cell); // go through the neighbors and draw the cells until the number appears in the cell
+          this._openEmptySquare(cell); // draw an empty cell
+          this._recursiveOpenArea(cell); // go through the neighbors and draw the cells until the number appears in the cell
         }
 
-        this.checkIfGameShouldStopped();
+        this._checkIfGameShouldStopped();
       }
     }
 
@@ -284,17 +286,17 @@ export class Sapper implements GameInterface {
      *
      * @param mouseEvent - events that occur due to the user interacting with a mouse
      */
-    private checkRightButtonClick(mouseEvent: MouseEvent): void {
+    private _checkRightButtonClick(mouseEvent: MouseEvent): void {
       // prevent the context menu from opening
       mouseEvent.preventDefault();
 
-      const cell = this.getCell(mouseEvent.offsetX, mouseEvent.offsetY);
+      const cell = this._getCell(mouseEvent.offsetX, mouseEvent.offsetY);
 
       if (!cell.isOpen) {
         if (!cell.hasFlag) {
-          this.setFlag(cell);
+          this._setFlag(cell);
         } else {
-          this.removeFlag(cell);
+          this._removeFlag(cell);
         }
       }
     }
@@ -305,11 +307,11 @@ export class Sapper implements GameInterface {
      * @param offsetX - offset of the mouse cursor along the X axis from the edge of the canvas
      * @param offsetY - offset of the mouse cursor along the Y axis from the edge of the canvas
      */
-    private getCell(offsetX: number, offsetY: number): Cell {
-      const x = this.mathInstance.getFloorNumber(offsetX / this.system.pixelsCountInCell);
-      const y = this.mathInstance.getFloorNumber(offsetY / this.system.pixelsCountInCell);
+    private _getCell(offsetX: number, offsetY: number): Cell {
+      const x = this.mathInstance.getFloorNumber(offsetX / (this._system as MapStructure).pixelsCountInCell);
+      const y = this.mathInstance.getFloorNumber(offsetY / (this._system as MapStructure).pixelsCountInCell);
 
-      return this.system.cells[y][x];
+      return this._system?.cells[y][x];
     }
 
     /**
@@ -317,9 +319,9 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private recursiveOpenArea(cell: Cell): void {
+    private _recursiveOpenArea(cell: Cell): void {
       for (const index in cell.area) {
-        const systemCell = this.system.cells[cell.area[index].y][cell.area[index].x];
+        const systemCell = this._system?.cells[cell.area[Number(index)].y][cell.area[Number(index)].x];
 
         /**
          * skip from processing:
@@ -329,11 +331,11 @@ export class Sapper implements GameInterface {
          */
         if (!systemCell.isOpen && !systemCell.hasFlag && !systemCell.hasBomb) {
           if (systemCell.value === 0) {
-            this.openEmptySquare(systemCell);
+            this._openEmptySquare(systemCell);
 
-            this.recursiveOpenArea(systemCell);
+            this._recursiveOpenArea(systemCell);
           } else {
-            this.openNumberSquare(systemCell);
+            this._openNumberSquare(systemCell);
 
             continue;
           }
@@ -348,14 +350,18 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private openEmptySquare(cell: Cell): void {
+    private _openEmptySquare(cell: Cell): void {
+      if (!this._colors) {
+        throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
+      }
+
       this.drawerInstance.drawSquare({
-        x: this.calcPixelCoord(cell.x),
-        y: this.calcPixelCoord(cell.y),
-      }, this.cellPixelsSize, this.colors.MAIN_BG_COLOR);
+        x: this._calcPixelCoord(cell.x),
+        y: this._calcPixelCoord(cell.y),
+      }, this._cellPixelsSize, this._colors.MAIN_BG_COLOR);
 
       cell.isOpen = true;
-      this.system.usedCells++;
+      (this._system as MapStructure).usedCells++;
     }
 
     /**
@@ -363,14 +369,14 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private openNumberSquare(cell: Cell): void {
+    private _openNumberSquare(cell: Cell): void {
       this.drawerInstance.drawNumber({
-        x: this.calcPixelCoord(cell.x),
-        y: this.calcPixelCoord(cell.y),
-      }, this.cellPixelsSize, cell.value);
+        x: this._calcPixelCoord(cell.x),
+        y: this._calcPixelCoord(cell.y),
+      }, this._cellPixelsSize, (cell.value as number));
 
       cell.isOpen = true;
-      this.system.usedCells++;
+      (this._system as MapStructure).usedCells++;
     }
 
     /**
@@ -378,24 +384,24 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private openBombCell(cell: Cell): void {
+    private _openBombCell(cell: Cell): void {
       this.drawerInstance.drawBomb({
-        x: this.calcPixelCoord(cell.x),
-        y: this.calcPixelCoord(cell.y),
-      }, this.cellPixelsSize);
+        x: this._calcPixelCoord(cell.x),
+        y: this._calcPixelCoord(cell.y),
+      }, this._cellPixelsSize);
 
       cell.isOpen = true;
-      this.system.usedCells++;
+      (this._system as MapStructure).usedCells++;
     }
 
     /** Open all bombs on the field */
-    private openAllBombs(): void {
-      const { bombPositions, cells, fieldSize } = this.system;
+    private _openAllBombs(): void {
+      const { bombPositions, cells, fieldSize } = (this._system as MapStructure);
 
       for (let y = 0; y < Object.keys(cells).length; y++) {
         for (let x = 0; x < Object.keys(cells[y]).length; x++) {
           if (bombPositions.includes(x + y * fieldSize)) {
-            this.openBombCell(cells[y][x]);
+            this._openBombCell(cells[y][x]);
           }
         }
       }
@@ -406,24 +412,28 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private setFlag(cell: Cell): void {
-      this.drawerInstance.drawFlag({
-        x: this.calcPixelCoord(cell.x),
-        y: this.calcPixelCoord(cell.y),
-      }, this.cellPixelsSize);
-
-      cell.hasFlag = true;
-      this.system.usedCells++;
-
-      this.system.bombLeft = this.system.bombLeft - 1;
-      // displaying the number of remaining bombs over the field
-      this.leftBombContainer.textContent = this.system.bombLeft.toString();
-
-      if (cell.hasBomb) {
-        this.countCorrectlySelectedBombs++;
+    private _setFlag(cell: Cell): void {
+      if (!this._system) {
+        throw new Error(ERROR_SYSTEM_ACCESS_MESSAGE);
       }
 
-      this.checkIfGameShouldStopped();
+      this.drawerInstance.drawFlag({
+        x: this._calcPixelCoord(cell.x),
+        y: this._calcPixelCoord(cell.y),
+      }, this._cellPixelsSize);
+
+      cell.hasFlag = true;
+      this._system.usedCells++;
+
+      this._system.bombLeft = this._system.bombLeft - 1;
+      // displaying the number of remaining bombs over the field
+      this._leftBombContainer.textContent = this._system.bombLeft.toString();
+
+      if (cell.hasBomb) {
+        this._countCorrectlySelectedBombs++;
+      }
+
+      this._checkIfGameShouldStopped();
     }
 
     /**
@@ -431,21 +441,29 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private removeFlag(cell: Cell): void {
+    private _removeFlag(cell: Cell): void {
+      if (!this._system) {
+        throw new Error(ERROR_SYSTEM_ACCESS_MESSAGE);
+      }
+
+      if (!this._colors) {
+        throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
+      }
+
       this.drawerInstance.drawSquare({
-        x: this.calcPixelCoord(cell.x),
-        y: this.calcPixelCoord(cell.y),
-      }, this.cellPixelsSize, this.colors.FIELD_BG_COLOR, false);
+        x: this._calcPixelCoord(cell.x),
+        y: this._calcPixelCoord(cell.y),
+      }, this._cellPixelsSize, this._colors.FIELD_BG_COLOR, false);
 
       cell.hasFlag = false;
-      this.system.usedCells--;
+      this._system.usedCells--;
 
-      this.system.bombLeft = this.system.bombLeft + 1;
+      this._system.bombLeft = this._system.bombLeft + 1;
       // displaying the number of remaining bombs over the field
-      this.leftBombContainer.textContent = this.system.bombLeft.toString();
+      this._leftBombContainer.textContent = this._system.bombLeft.toString();
 
       if (cell.hasBomb) {
-        this.countCorrectlySelectedBombs--;
+        this._countCorrectlySelectedBombs--;
       }
     }
 
@@ -454,8 +472,8 @@ export class Sapper implements GameInterface {
      *
      * @param coord - coordinate on the playing field
      */
-    private calcPixelCoord(coord: FieldCoordinate): PixelsAmount {
-      return Number(coord) * this.cellPixelsSize;
+    private _calcPixelCoord(coord: FieldCoordinate): PixelsAmount {
+      return Number(coord) * this._cellPixelsSize;
     }
 
     /**
@@ -463,43 +481,47 @@ export class Sapper implements GameInterface {
      *
      * @param isWin - true, if the game ends with a win
      */
-    private stopGame(isWin = false): void {
-      this.stopTimer(isWin);
+    private _stopGame(isWin = false): void {
+      this._stopTimer(isWin);
 
       // show the restart button
-      this.resultContainer.style.display = 'flex';
+      this._resultContainer.style.display = 'flex';
 
       if (isWin) {
         // if you won, show congratulations
-        this.winContainer.style.display = 'flex';
+        this._winContainer.style.display = 'flex';
       }
 
       // this is to animate the background appearance
       setTimeout(() => {
-        this.resultContainer.classList.add('result-container--is-visible');
+        this._resultContainer.classList.add('result-container--is-visible');
       }, 50);
     }
 
     /**
      * Check the conditions for stopping the game
      */
-    private checkIfGameShouldStopped(): void {
+    private _checkIfGameShouldStopped(): void {
+      if (!this._system) {
+        throw new Error(ERROR_SYSTEM_ACCESS_MESSAGE);
+      }
+
       // has zero bomb
-      if (!(this.system.bombLeft === 0)) {
+      if (!(this._system.bombLeft === 0)) {
         return;
       }
 
       // all bombs are correctly selected
-      if (!(this.system.bombCount === this.countCorrectlySelectedBombs)) {
+      if (!(this._system.bombCount === this._countCorrectlySelectedBombs)) {
         return;
       }
 
       // all cells are opened
-      if (!(this.system.usedCells === (this.system.fieldSize * this.system.fieldSize))) {
+      if (!(this._system.usedCells === (this._system.fieldSize * this._system.fieldSize))) {
         return;
       }
 
       // stop the game with a win if all the bombs have run out and are marked with flags correctly
-      this.stopGame(true);
+      this._stopGame(true);
     }
 }

@@ -14,15 +14,20 @@ type PixelsAmount = number;
 type FieldCoordinate = number;
 type PixelCoordinate = number;
 
+/** Neighboring cells relative to the center cell */
+type AreaStructure = {
+  [key: number]: Cell;
+};
+
 /** Game board cell */
 type Cell = {
-    x: FieldCoordinate;
-    y: FieldCoordinate;
-    area?: any; // todo: fix type
-    hasBomb?: boolean;
-    hasFlag?: boolean;
-    isOpen?: boolean;
-    value?: number;
+  x: FieldCoordinate;
+  y: FieldCoordinate;
+  area?: AreaStructure;
+  hasBomb?: boolean;
+  hasFlag?: boolean;
+  isOpen?: boolean;
+  value?: number;
 };
 
 /** Positions of bombs on the field */

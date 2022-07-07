@@ -10,14 +10,19 @@ export type Complexity = {
     selected: boolean,
 };
 
-/** List of possible levels of difficulty of the game */
+/**
+ * List of possible levels of difficulty of the game
+ *
+ * @example
+ *  - beginner
+ *  - easy
+ *  - medium
+ *  - hard
+ *  - huge
+ *  - extreme
+ */
 export type ComplexityList = {
-    beginner: Complexity,
-    easy: Complexity,
-    medium: Complexity,
-    hard: Complexity,
-    huge: Complexity,
-    extreme: Complexity,
+    [key: string]: Complexity,
 };
 
 /** Basic game settings */
