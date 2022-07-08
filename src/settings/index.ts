@@ -1,8 +1,8 @@
-import { GameSettings } from './types';
+import { TGameSettings } from './types';
 import { levels } from './levels';
 
 /** Basic game settings */
-const settings: GameSettings = {
+const settings: TGameSettings = {
   /** Size of the field in pixels */
   canvasSize: 800,
 

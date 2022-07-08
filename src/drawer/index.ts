@@ -2,13 +2,13 @@ import { UIInterface, CustomProperties } from 'just-engine/src/ui/types';
 import { CanvasContext, ContextInterface } from 'just-engine/src/context/types';
 import { SourceInterface } from 'just-engine/src/source/types';
 
-import { GameSettings } from 'settings/types';
+import { TGameSettings } from 'settings/types';
 
-import { DrawerInterface } from './types';
+import { IDrawer } from './types';
 import { ERROR_CONTEXT_ACCESS_MESSAGE, ERROR_COLORS_ACCESS_MESSAGE } from './constants';
 
 /** Class implements painting on canvas */
-export class DrawerClass implements DrawerInterface {
+export class CDrawer implements IDrawer {
   /** Canvas 2d context */
   private _context: CanvasContext;
 
@@ -31,7 +31,7 @@ export class DrawerClass implements DrawerInterface {
     private contextInstance: ContextInterface,
     private sourceInstance: SourceInterface,
     private uiInstance: UIInterface,
-    private settings: GameSettings,
+    private settings: TGameSettings,
   ) {
     this.contextInstance.init(this.settings.canvasSize, this.settings.devicePixelRatio);
     this._context = this.contextInstance.getInstance();
@@ -55,7 +55,7 @@ export class DrawerClass implements DrawerInterface {
    * @param color - square color
    * @param hasBorders - whether to draw borders at a square
    */
-  public drawSquare({ x, y }: Cell, size: PixelsAmount, color: string, hasBorders = true): void {
+  public drawSquare({ x, y }: TCell, size: TPixelsAmount, color: string, hasBorders = true): void {
     if (!this._context) {
       throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }
@@ -77,7 +77,7 @@ export class DrawerClass implements DrawerInterface {
    * @param size - square size in pixels
    * @param value - number to draw
    */
-  public drawNumber({ x, y }: Cell, size: PixelsAmount, value: number): void {
+  public drawNumber({ x, y }: TCell, size: TPixelsAmount, value: number): void {
     if (!this._context) {
       throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }
@@ -104,7 +104,7 @@ export class DrawerClass implements DrawerInterface {
    * @param cell.y - cell y coordinate
    * @param size - square size in pixels
    */
-  public drawBomb({ x, y }: Cell, size: PixelsAmount): void {
+  public drawBomb({ x, y }: TCell, size: TPixelsAmount): void {
     if (!this._context) {
       throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }
@@ -128,7 +128,7 @@ export class DrawerClass implements DrawerInterface {
    * @param cell.y - cell y coordinate
    * @param size - square size in pixels
    */
-  public drawFlag({ x, y }: Cell, size: PixelsAmount): void {
+  public drawFlag({ x, y }: TCell, size: TPixelsAmount): void {
     if (!this._context) {
       throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }
@@ -171,7 +171,7 @@ export class DrawerClass implements DrawerInterface {
    * @param cell.y - cell y coordinate
    * @param size - square size in pixels
    */
-  private _drawBorders({ x, y }: Cell, size: PixelsAmount): void {
+  private _drawBorders({ x, y }: TCell, size: TPixelsAmount): void {
     if (!this._context) {
       throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }

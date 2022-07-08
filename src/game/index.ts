@@ -5,16 +5,16 @@ import { ContextInterface } from 'just-engine/src/context/types';
 import { DomInterface } from 'just-engine/src/dom/types';
 import { MathInterface } from 'just-engine/src/math/types';
 
-import { DrawerInterface } from 'drawer/types';
-import { GameSettings } from 'settings/types';
-import { MapStructure, BuilderInterface } from 'builder/types';
+import { IDrawer } from 'drawer/types';
+import { TGameSettings } from 'settings/types';
+import { TMapStructure, IBuilder } from 'builder/types';
 import { ERROR_COLORS_ACCESS_MESSAGE } from 'drawer/constants';
 
-import { GameInterface } from './types';
+import { IGame } from './types';
 import { ERROR_SYSTEM_ACCESS_MESSAGE } from './constants';
 
 /** The main class of the game */
-export class Sapper implements GameInterface {
+export class CSapper implements IGame {
     /** HTML select for choice of difficulty level */
     private _select: HTMLSelectElement;
 
@@ -52,10 +52,10 @@ export class Sapper implements GameInterface {
     private _bestTimeContainer: HTMLElement;
 
     /** Structure of the field of the selected level of difficulty */
-    private _system: Nullable<MapStructure> = null;
+    private _system: Nullable<TMapStructure> = null;
 
     /** Cell size in pixels */
-    private _cellPixelsSize: PixelsAmount = 0;
+    private _cellPixelsSize: TPixelsAmount = 0;
 
     /** Timer for counting time */
     private _timerInterval: NodeJS.Timer;
@@ -77,11 +77,11 @@ export class Sapper implements GameInterface {
      * @param uiInstance - to control the UI in the game
      */
     constructor(
-        private settings: GameSettings,
+        private settings: TGameSettings,
         private contextInstance: ContextInterface,
-        private drawerInstance: DrawerInterface,
+        private drawerInstance: IDrawer,
         private domInstance: DomInterface,
-        private builderInstance: BuilderInterface,
+        private builderInstance: IBuilder,
         private mathInstance: MathInterface,
         private storageInstance: StorageInterface,
         private uiInstance: UIInterface,
@@ -244,7 +244,7 @@ export class Sapper implements GameInterface {
         throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
       }
 
-      const size: PixelsAmount = this.settings.canvasSize;
+      const size: TPixelsAmount = this.settings.canvasSize;
 
       this.drawerInstance.drawSquare({
         x: 0,
@@ -305,9 +305,9 @@ export class Sapper implements GameInterface {
      * @param offsetX - offset of the mouse cursor along the X axis from the edge of the canvas
      * @param offsetY - offset of the mouse cursor along the Y axis from the edge of the canvas
      */
-    private _getCell(offsetX: number, offsetY: number): Cell {
-      const x = this.mathInstance.getFloorNumber(offsetX / (this._system as MapStructure).pixelsCountInCell);
-      const y = this.mathInstance.getFloorNumber(offsetY / (this._system as MapStructure).pixelsCountInCell);
+    private _getCell(offsetX: number, offsetY: number): TCell {
+      const x = this.mathInstance.getFloorNumber(offsetX / (this._system as TMapStructure).pixelsCountInCell);
+      const y = this.mathInstance.getFloorNumber(offsetY / (this._system as TMapStructure).pixelsCountInCell);
 
       return this._system?.cells[y][x];
     }
@@ -317,7 +317,7 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private _recursiveOpenArea(cell: Cell): void {
+    private _recursiveOpenArea(cell: TCell): void {
       for (const index in cell.area) {
         const systemCell = this._system?.cells[cell.area[Number(index)].y][cell.area[Number(index)].x];
 
@@ -348,7 +348,7 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private _openEmptySquare(cell: Cell): void {
+    private _openEmptySquare(cell: TCell): void {
       if (!this._colors) {
         throw new Error(ERROR_COLORS_ACCESS_MESSAGE);
       }
@@ -367,7 +367,7 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private _openNumberSquare(cell: Cell): void {
+    private _openNumberSquare(cell: TCell): void {
       this.drawerInstance.drawNumber({
         x: this._calcPixelCoord(cell.x),
         y: this._calcPixelCoord(cell.y),
@@ -382,7 +382,7 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private _openBombCell(cell: Cell): void {
+    private _openBombCell(cell: TCell): void {
       this.drawerInstance.drawBomb({
         x: this._calcPixelCoord(cell.x),
         y: this._calcPixelCoord(cell.y),
@@ -394,7 +394,7 @@ export class Sapper implements GameInterface {
 
     /** Open all bombs on the field */
     private _openAllBombs(): void {
-      const { bombPositions, cells, fieldSize } = (this._system as MapStructure);
+      const { bombPositions, cells, fieldSize } = (this._system as TMapStructure);
 
       for (let y = 0; y < Object.keys(cells).length; y++) {
         for (let x = 0; x < Object.keys(cells[y]).length; x++) {
@@ -410,7 +410,7 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private _setFlag(cell: Cell): void {
+    private _setFlag(cell: TCell): void {
       if (!this._system) {
         throw new Error(ERROR_SYSTEM_ACCESS_MESSAGE);
       }
@@ -439,7 +439,7 @@ export class Sapper implements GameInterface {
      *
      * @param cell - game board cell
      */
-    private _removeFlag(cell: Cell): void {
+    private _removeFlag(cell: TCell): void {
       if (!this._system) {
         throw new Error(ERROR_SYSTEM_ACCESS_MESSAGE);
       }
@@ -470,7 +470,7 @@ export class Sapper implements GameInterface {
      *
      * @param coord - coordinate on the playing field
      */
-    private _calcPixelCoord(coord: FieldCoordinate): PixelsAmount {
+    private _calcPixelCoord(coord: TFieldCoordinate): TPixelsAmount {
       return Number(coord) * this._cellPixelsSize;
     }
 

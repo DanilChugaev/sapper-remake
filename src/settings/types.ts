@@ -1,10 +1,10 @@
 /** Уровень сложности игры */
-export type Complexity = {
+export type TComplexity = {
     /** Number of level bombs */
     bombCount: number,
 
     /** Size of the field in cells */
-    fieldSize: CellAmount,
+    fieldSize: TCellAmount,
 
     /** If level is selected */
     selected: boolean,
@@ -21,13 +21,13 @@ export type Complexity = {
  *  - huge
  *  - extreme
  */
-export type ComplexityList = {
-    [key: string]: Complexity,
+export type TComplexityList = {
+    [key: string]: TComplexity,
 };
 
 /** Basic game settings */
-export type GameSettings = {
-    canvasSize: PixelsAmount;
+export type TGameSettings = {
+    canvasSize: TPixelsAmount;
     devicePixelRatio: number;
-    levels: ComplexityList;
+    levels: TComplexityList;
 };

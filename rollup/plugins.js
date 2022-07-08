@@ -50,6 +50,7 @@ export default [
       { find: 'settings', replacement: `${APP_DIR}/settings` },
       { find: 'drawer', replacement: `${APP_DIR}/drawer` },
       { find: 'builder', replacement: `${APP_DIR}/builder` },
+      { find: 'game', replacement: `${APP_DIR}/game` },
     ],
   }),
 

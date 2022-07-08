@@ -1,5 +1,5 @@
 import { container } from '../di/core';
-import { GameSettings } from './types';
+import { TGameSettings } from './types';
 import settings from './index';
 
-container.registerSingleton<GameSettings>(() => settings);
+container.registerSingleton<TGameSettings>(() => settings);

@@ -18,6 +18,9 @@
       "builder/*": [
         "./src/builder/*"
       ],
+      "game/*": [
+        "./src/game/*"
+      ],
     }
   }
 }

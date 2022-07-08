@@ -1,22 +1,22 @@
-import { GameSettings } from '../settings/types';
+import { TGameSettings } from 'settings/types';
 
 /** Structure of the field of the selected level of difficulty */
-export type MapStructure = {
+export type TMapStructure = {
     pixelsCountInCell: number,
     bombCount: number,
     bombLeft: number,
     usedCells: number,
     cells: any, // TODO: fix type
-    bombPositions: BombPositions,
+    bombPositions: TBombPositions,
     fieldSize: number,
 };
 
 /** Responsible for creating levels */
-export interface BuilderInterface {
+export interface IBuilder {
     /**
      * Build level
      *
      * @param settings - basic game settings
      */
-    build(settings: GameSettings): MapStructure;
+    build(settings: TGameSettings): TMapStructure;
 }

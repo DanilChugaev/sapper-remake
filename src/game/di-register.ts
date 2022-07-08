@@ -1,5 +1,5 @@
 import { container } from '../di/core';
-import { GameInterface } from './types';
-import { Sapper } from './index';
+import { IGame } from './types';
+import { CSapper } from './index';
 
-container.registerSingleton<GameInterface, Sapper>();
+container.registerSingleton<IGame, CSapper>();

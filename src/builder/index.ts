@@ -1,16 +1,16 @@
 import { MathInterface } from 'just-engine/src/math/types';
 
-import { Complexity, ComplexityList, GameSettings } from '../settings/types';
-import { MapStructure, BuilderInterface } from './types';
+import { TComplexity, TComplexityList, TGameSettings } from 'settings/types';
+import { TMapStructure, IBuilder } from './types';
 import { AREA_STRUCTURE, COUNT_OF_CELLS_AROUND_CENTRAL } from './constants';
 
 /** Class responsible for creating levels based on levels settings */
-export class BuilderClass implements BuilderInterface {
+export class CBuilder implements IBuilder {
     /** Size of the field in cells */
-    private _fieldSize: CellAmount = 0;
+    private _fieldSize: TCellAmount = 0;
 
     /** Size of the field in pixels */
-    private _canvasSize: PixelsAmount = 0;
+    private _canvasSize: TPixelsAmount = 0;
 
     /** Number of level bombs */
     private _bombCount = 0;
@@ -27,7 +27,7 @@ export class BuilderClass implements BuilderInterface {
      *
      * @param settings - basic game settings
      */
-    public build(settings: GameSettings): MapStructure {
+    public build(settings: TGameSettings): TMapStructure {
       const { fieldSize, bombCount } = this._getSelectedLevel(settings.levels);
 
       this._fieldSize = fieldSize;
@@ -44,8 +44,8 @@ export class BuilderClass implements BuilderInterface {
      *
      * @param levels - list of possible levels of difficulty of the game
      */
-    private _getSelectedLevel(levels: ComplexityList): Complexity {
-      let selectedLevel: Complexity = {
+    private _getSelectedLevel(levels: TComplexityList): TComplexity {
+      let selectedLevel: TComplexity = {
         bombCount: 0,
         selected: false,
         fieldSize: 0,
@@ -61,8 +61,8 @@ export class BuilderClass implements BuilderInterface {
     }
 
     /** Generates the field structure for the selected difficulty level */
-    private _generateMapStructure(): MapStructure {
-      const mapStructure: MapStructure = {
+    private _generateMapStructure(): TMapStructure {
+      const mapStructure: TMapStructure = {
         pixelsCountInCell: this._canvasSize / this._fieldSize,
         bombCount: this._bombCount,
         bombLeft: this._bombCount,
@@ -85,9 +85,9 @@ export class BuilderClass implements BuilderInterface {
           }
 
           const hasBomb: boolean = mapStructure.bombPositions.includes(x + y * this._fieldSize);
-          const area: AreaStructure = this._generateCellArea({ x, y });
+          const area: TAreaStructure = this._generateCellArea({ x, y });
 
-          const cellStructure: Cell = {
+          const cellStructure: TCell = {
             y: row,
             x: cell,
             area,
@@ -113,8 +113,8 @@ export class BuilderClass implements BuilderInterface {
      * @param cell.x - the x coordinate on the playing field
      * @param cell.y - the y coordinate on the playing field
      */
-    private _generateCellArea({ x, y }: Cell): AreaStructure {
-      const area: AreaStructure = {};
+    private _generateCellArea({ x, y }: TCell): TAreaStructure {
+      const area: TAreaStructure = {};
 
       for (let index = 0; index < COUNT_OF_CELLS_AROUND_CENTRAL; index++) {
         /** Checking if the cell goes beyond the left and top borders of the field */
@@ -141,8 +141,8 @@ export class BuilderClass implements BuilderInterface {
      *
      * @param cellsCount - number of cells of the playing field
      */
-    private _generateRandomBombPositions(cellsCount: CellAmount): number[] {
-      const bombPositions: BombPositions = [];
+    private _generateRandomBombPositions(cellsCount: TCellAmount): number[] {
+      const bombPositions: TBombPositions = [];
 
       for (let index = 0; index < this._bombCount; index++) {
         let randomPosition: number = this.mathInstance.getRandomArbitrary(1, cellsCount);
@@ -164,7 +164,7 @@ export class BuilderClass implements BuilderInterface {
      * @param area - neighboring cells relative to the center cell
      * @param bombPositions - positions of bombs on the field
      */
-    private _calcBombsAroundCells(area: AreaStructure, bombPositions: BombPositions): number {
+    private _calcBombsAroundCells(area: TAreaStructure, bombPositions: TBombPositions): number {
       let result = 0;
 
       for (const key in area) {

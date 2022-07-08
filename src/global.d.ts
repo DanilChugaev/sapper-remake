@@ -6,24 +6,24 @@ declare module 'consts:IS_DEV_MODE' {
 }
 
 /** Number of cells of the playing field */
-type CellAmount = number;
+type TCellAmount = number;
 /** Number of pixels */
-type PixelsAmount = number;
+type TPixelsAmount = number;
 
 /** Coordinate on the playing field */
-type FieldCoordinate = number;
-type PixelCoordinate = number;
+type TFieldCoordinate = number;
+type TPixelCoordinate = number;
 
 /** Neighboring cells relative to the center cell */
-type AreaStructure = {
-  [key: number]: Cell;
+type TAreaStructure = {
+  [key: number]: TCell;
 };
 
 /** Game board cell */
-type Cell = {
-  x: FieldCoordinate;
-  y: FieldCoordinate;
-  area?: AreaStructure;
+type TCell = {
+  x: TFieldCoordinate;
+  y: TFieldCoordinate;
+  area?: TAreaStructure;
   hasBomb?: boolean;
   hasFlag?: boolean;
   isOpen?: boolean;
@@ -31,9 +31,9 @@ type Cell = {
 };
 
 /** Positions of bombs on the field */
-type BombPositions = number[];
+type TBombPositions = number[];
 
 /** Any */
-type HexadecimalColor = string;
-type Color = HexadecimalColor;
+type THexadecimalColor = string;
+type TColor = THexadecimalColor;
 type Nullable<T> = T | null;

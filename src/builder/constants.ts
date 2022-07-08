@@ -6,7 +6,7 @@
  *  #7-8-3#
  *  #6#5#4#
  */
-export const AREA_STRUCTURE: AreaStructure = {
+export const AREA_STRUCTURE: TAreaStructure = {
   0: { x: -1, y: -1 },
   1: { x:  0, y: -1 },
   2: { x:  1, y: -1 },

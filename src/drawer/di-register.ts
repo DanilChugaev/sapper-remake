@@ -1,5 +1,5 @@
 import { container } from '../di/core';
-import { DrawerInterface } from './types';
-import { DrawerClass } from './index';
+import { IDrawer } from './types';
+import { CDrawer } from './index';
 
-container.registerSingleton<DrawerInterface, DrawerClass>();
+container.registerSingleton<IDrawer, CDrawer>();

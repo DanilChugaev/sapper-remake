@@ -1,5 +1,5 @@
 import { container } from '../di/core';
-import { BuilderInterface } from './types';
-import { BuilderClass } from './index';
+import { IBuilder } from './types';
+import { CBuilder } from './index';
 
-container.registerSingleton<BuilderInterface, BuilderClass>();
+container.registerSingleton<IBuilder, CBuilder>();
