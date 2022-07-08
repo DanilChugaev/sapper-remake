@@ -1,5 +1,5 @@
 {
-  "name": "rollup-ts-template",
+  "name": "sapper-remake",
   "version": "1.0.0",
   "description": "template for ts projects with rollup",
   "main": "index.js",
@@ -46,14 +46,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DanilChugaev/rollup-ts-template.git"
+    "url": "git+https://github.com/DanilChugaev/sapper-remake.git"
   },
   "author": "danilchugaev",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DanilChugaev/rollup-ts-template/issues"
+    "url": "https://github.com/DanilChugaev/sapper-remake/issues"
   },
-  "homepage": "https://github.com/DanilChugaev/rollup-ts-template#readme",
+  "homepage": "https://github.com/DanilChugaev/sapper-remake#readme",
   "dependencies": {
     "@wessberg/di": "^2.1.0",
     "just-engine": "^0.0.3"
