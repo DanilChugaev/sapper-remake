@@ -223,11 +223,9 @@ export class Sapper implements GameInterface {
       }
 
       for (const key in this.settings.levels) {
-        // @ts-ignore
         this.settings.levels[key].selected = false;
       }
 
-      // @ts-ignore
       this.settings.levels[selectedLevel].selected = true;
     }
 
