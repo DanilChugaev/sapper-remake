@@ -2,11 +2,10 @@ import { UIInterface, CustomProperties } from 'just-engine/src/ui/types';
 import { CanvasContext, ContextInterface } from 'just-engine/src/context/types';
 import { SourceInterface } from 'just-engine/src/source/types';
 
-import { GameSettings } from '../settings/types';
+import { GameSettings } from 'settings/types';
 
 import { DrawerInterface } from './types';
 import { ERROR_CONTEXT_ACCESS_MESSAGE, ERROR_COLORS_ACCESS_MESSAGE } from './constants';
-
 
 /** Class implements painting on canvas */
 export class DrawerClass implements DrawerInterface {

@@ -47,7 +47,9 @@ export default [
   /** defining aliases when bundling packages */
   alias({
     entries: [
-      { find: 'modules', replacement: `./modules` },
+      { find: 'settings', replacement: `${APP_DIR}/settings` },
+      { find: 'drawer', replacement: `${APP_DIR}/drawer` },
+      { find: 'builder', replacement: `${APP_DIR}/builder` },
     ],
   }),
 

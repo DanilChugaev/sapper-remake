@@ -7,6 +7,17 @@
     "forceConsistentCasingInFileNames": true,
     // "strict": true,
     "skipLibCheck": true,
-    "typeRoots": ["node_modules/@types/"]
+    "typeRoots": ["node_modules/@types/"],
+    "paths": {
+      "settings/*": [
+        "./src/settings/*"
+      ],
+      "drawer/*": [
+        "./src/drawer/*"
+      ],
+      "builder/*": [
+        "./src/builder/*"
+      ],
+    }
   }
 }

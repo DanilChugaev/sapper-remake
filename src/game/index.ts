@@ -5,10 +5,10 @@ import { ContextInterface } from 'just-engine/src/context/types';
 import { DomInterface } from 'just-engine/src/dom/types';
 import { MathInterface } from 'just-engine/src/math/types';
 
-import { DrawerInterface } from '../drawer/types';
-import { GameSettings } from '../settings/types';
-import { MapStructure, BuilderInterface } from '../builder/types';
-import { ERROR_COLORS_ACCESS_MESSAGE } from '../drawer/constants';
+import { DrawerInterface } from 'drawer/types';
+import { GameSettings } from 'settings/types';
+import { MapStructure, BuilderInterface } from 'builder/types';
+import { ERROR_COLORS_ACCESS_MESSAGE } from 'drawer/constants';
 
 import { GameInterface } from './types';
 import { ERROR_SYSTEM_ACCESS_MESSAGE } from './constants';
@@ -106,7 +106,7 @@ export class Sapper implements GameInterface {
     /** Initializes game engine after the DOM has loaded */
     public init(): void {
       this.domInstance.afterLoad(() => {
-        const selectedLevel = this.storageInstance.get('level') || 'easy';
+        const selectedLevel = this.storageInstance.get('level') || 'easy'; // TODO: 'easy' as default level in constants
 
         /** if we have previously selected the level, then set it again */
         this._changeLevelInSettings(selectedLevel);
@@ -361,7 +361,7 @@ export class Sapper implements GameInterface {
       }, this._cellPixelsSize, this._colors.MAIN_BG_COLOR);
 
       cell.isOpen = true;
-      (this._system as MapStructure).usedCells++;
+      this._increaseUsedCells();
     }
 
     /**
@@ -376,7 +376,7 @@ export class Sapper implements GameInterface {
       }, this._cellPixelsSize, (cell.value as number));
 
       cell.isOpen = true;
-      (this._system as MapStructure).usedCells++;
+      this._increaseUsedCells();
     }
 
     /**
@@ -391,7 +391,7 @@ export class Sapper implements GameInterface {
       }, this._cellPixelsSize);
 
       cell.isOpen = true;
-      (this._system as MapStructure).usedCells++;
+      this._increaseUsedCells();
     }
 
     /** Open all bombs on the field */
@@ -423,7 +423,7 @@ export class Sapper implements GameInterface {
       }, this._cellPixelsSize);
 
       cell.hasFlag = true;
-      this._system.usedCells++;
+      this._increaseUsedCells();
 
       this._system.bombLeft = this._system.bombLeft - 1;
       // displaying the number of remaining bombs over the field
@@ -456,7 +456,7 @@ export class Sapper implements GameInterface {
       }, this._cellPixelsSize, this._colors.FIELD_BG_COLOR, false);
 
       cell.hasFlag = false;
-      this._system.usedCells--;
+      this._decreaseUsedCells();
 
       this._system.bombLeft = this._system.bombLeft + 1;
       // displaying the number of remaining bombs over the field
@@ -523,5 +523,19 @@ export class Sapper implements GameInterface {
 
       // stop the game with a win if all the bombs have run out and are marked with flags correctly
       this._stopGame(true);
+    }
+
+    /**
+     * Increase count of used cells in map structure
+     */
+    private _increaseUsedCells(): void {
+      this._system.usedCells++;
+    }
+
+    /**
+     * Decrease count of used cells in map structure
+     */
+    private _decreaseUsedCells(): void {
+      this._system.usedCells--;
     }
 }
