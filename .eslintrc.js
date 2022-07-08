@@ -30,6 +30,7 @@ module.exports = {
     'Color': true,
     'Nullable': true,
     'AreaStructure': true,
+    'NodeJS': true,
   },
   rules: {
     '@typescript-eslint/ban-ts-comment': 0,

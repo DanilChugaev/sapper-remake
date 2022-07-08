@@ -58,7 +58,7 @@ export class Sapper implements GameInterface {
     private _cellPixelsSize: PixelsAmount = 0;
 
     /** Timer for counting time */
-    private _timerInterval: any; // TODO: fix type
+    private _timerInterval: NodeJS.Timer;
 
     /** Number of correctly allocated bombs */
     private _countCorrectlySelectedBombs = 0;
