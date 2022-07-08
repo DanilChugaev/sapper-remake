@@ -1,9 +1,9 @@
 
-import { UIInterface, CustomProperties } from 'just-engine/src/ui/types';
-import { StorageInterface } from 'just-engine/src/storage/types';
-import { ContextInterface } from 'just-engine/src/context/types';
-import { DomInterface } from 'just-engine/src/dom/types';
-import { MathInterface } from 'just-engine/src/math/types';
+import { IUI, TCustomProperties } from 'just-engine/src/ui/types';
+import { IStorage } from 'just-engine/src/storage/types';
+import { IContext } from 'just-engine/src/context/types';
+import { IDom } from 'just-engine/src/dom/types';
+import { IMath } from 'just-engine/src/math/types';
 
 import { IDrawer } from 'drawer/types';
 import { TGameSettings } from 'settings/types';
@@ -64,7 +64,7 @@ export class CSapper implements IGame {
     private _countCorrectlySelectedBombs = 0;
 
     /** Color variables from custom properties */
-    private _colors: CustomProperties;
+    private _colors: TCustomProperties;
 
     /**
      * @param settings - basic game settings
@@ -78,13 +78,13 @@ export class CSapper implements IGame {
      */
     constructor(
         private settings: TGameSettings,
-        private contextInstance: ContextInterface,
+        private contextInstance: IContext,
         private drawerInstance: IDrawer,
-        private domInstance: DomInterface,
+        private domInstance: IDom,
         private builderInstance: IBuilder,
-        private mathInstance: MathInterface,
-        private storageInstance: StorageInterface,
-        private uiInstance: UIInterface,
+        private mathInstance: IMath,
+        private storageInstance: IStorage,
+        private uiInstance: IUI,
     ) {
       this._select = <HTMLSelectElement> domInstance.getElement('select-level');
       this._startGameButton = <HTMLButtonElement> domInstance.getElement('start-game');

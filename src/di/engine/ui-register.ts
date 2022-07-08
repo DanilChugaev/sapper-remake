@@ -1,6 +1,6 @@
-import { UIInterface } from 'just-engine/src/ui/types';
-import { UIClass } from 'just-engine/src/ui/index';
+import { IUI } from 'just-engine/src/ui/types';
+import { CUI } from 'just-engine/src/ui/index';
 
 import { container } from '../core';
 
-container.registerSingleton<UIInterface, UIClass>();
+container.registerSingleton<IUI, CUI>();

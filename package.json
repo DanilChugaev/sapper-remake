@@ -16,6 +16,10 @@
     "stats": "rollup -c rollup/rollup.config.js --stats",
     "prepare": "husky install"
   },
+  "dependencies": {
+    "@wessberg/di": "^2.1.0",
+    "just-engine": "^0.0.4"
+  },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.9",
     "@rollup/plugin-commonjs": "^22.0.1",
@@ -53,9 +57,5 @@
   "bugs": {
     "url": "https://github.com/DanilChugaev/sapper-remake/issues"
   },
-  "homepage": "https://github.com/DanilChugaev/sapper-remake#readme",
-  "dependencies": {
-    "@wessberg/di": "^2.1.0",
-    "just-engine": "^0.0.3"
-  }
+  "homepage": "https://github.com/DanilChugaev/sapper-remake#readme"
 }

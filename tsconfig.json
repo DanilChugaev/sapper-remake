@@ -8,6 +8,7 @@
     // "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types/"],
+    "strictPropertyInitialization": false,
     "paths": {
       "settings/*": [
         "./src/settings/*"

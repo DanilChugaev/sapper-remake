@@ -1,6 +1,6 @@
-import { UIInterface, CustomProperties } from 'just-engine/src/ui/types';
-import { CanvasContext, ContextInterface } from 'just-engine/src/context/types';
-import { SourceInterface } from 'just-engine/src/source/types';
+import { IUI, TCustomProperties } from 'just-engine/src/ui/types';
+import { TCanvasContext, IContext } from 'just-engine/src/context/types';
+import { ISource } from 'just-engine/src/source/types';
 
 import { TGameSettings } from 'settings/types';
 
@@ -10,7 +10,7 @@ import { ERROR_CONTEXT_ACCESS_MESSAGE, ERROR_COLORS_ACCESS_MESSAGE } from './con
 /** Class implements painting on canvas */
 export class CDrawer implements IDrawer {
   /** Canvas 2d context */
-  private _context: CanvasContext;
+  private _context: TCanvasContext;
 
   /** Bomb image */
   private _bomb: CanvasImageSource;
@@ -19,7 +19,7 @@ export class CDrawer implements IDrawer {
   private _flag: CanvasImageSource;
 
   /** Color variables from custom properties */
-  private _colors: CustomProperties;
+  private _colors: TCustomProperties;
 
   /**
    * @param contextInstance - provides the context of the canvas
@@ -28,9 +28,9 @@ export class CDrawer implements IDrawer {
    * @param settings - basic game settings
    */
   constructor(
-    private contextInstance: ContextInterface,
-    private sourceInstance: SourceInterface,
-    private uiInstance: UIInterface,
+    private contextInstance: IContext,
+    private sourceInstance: ISource,
+    private uiInstance: IUI,
     private settings: TGameSettings,
   ) {
     this.contextInstance.init(this.settings.canvasSize, this.settings.devicePixelRatio);

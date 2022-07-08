@@ -1,4 +1,4 @@
-import { MathInterface } from 'just-engine/src/math/types';
+import { IMath } from 'just-engine/src/math/types';
 
 import { TComplexity, TComplexityList, TGameSettings } from 'settings/types';
 import { TMapStructure, IBuilder } from './types';
@@ -19,7 +19,7 @@ export class CBuilder implements IBuilder {
      * @param mathInstance - math number generator
      */
     constructor(
-        private mathInstance: MathInterface,
+        private mathInstance: IMath,
     ) {}
 
     /**
