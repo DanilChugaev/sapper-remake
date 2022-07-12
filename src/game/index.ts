@@ -113,11 +113,11 @@ export class CSapper implements IGame {
         this._changeLevelInSettings(selectedLevel);
 
         for (const key in this.settings.levels) {
-          const option = <HTMLOptionElement> this.domInstance.createElement('option');
-
-          option.textContent = key;
-          option.value = key;
-          option.selected = this.settings.levels[key].selected;
+          const option = <HTMLOptionElement> this.domInstance.createElement('option', {
+            textContent: key,
+            value: key,
+            selected: this.settings.levels[key].selected,
+          });
 
           /** substitute the selection options into the select from the settings */
           this._select.appendChild(option);
