@@ -4,6 +4,7 @@ import { IStorage } from 'just-engine/src/storage/types';
 import { IContext } from 'just-engine/src/context/types';
 import { IDom } from 'just-engine/src/dom/types';
 import { IMath } from 'just-engine/src/math/types';
+import { ITimer } from 'just-engine/src/timer/types';
 
 import { IDrawer } from 'drawer/types';
 import { TGameSettings } from 'settings/types';
@@ -57,9 +58,6 @@ export class CSapper implements IGame {
     /** Cell size in pixels */
     private _cellPixelsSize: TPixelsAmount = 0;
 
-    /** Timer for counting time */
-    private _timerInterval: NodeJS.Timer;
-
     /** Number of correctly allocated bombs */
     private _countCorrectlySelectedBombs = 0;
 
@@ -75,6 +73,7 @@ export class CSapper implements IGame {
      * @param mathInstance - math number generator
      * @param storageInstance - long-term storage of game data
      * @param uiInstance - to control the UI in the game
+     * @param timerInstance - to control the UI in the game
      */
     constructor(
         private settings: TGameSettings,
@@ -85,6 +84,7 @@ export class CSapper implements IGame {
         private mathInstance: IMath,
         private storageInstance: IStorage,
         private uiInstance: IUI,
+        private timerInstance: ITimer,
     ) {
       this._select = <HTMLSelectElement> domInstance.getElement('select-level');
       this._startGameButton = <HTMLButtonElement> domInstance.getElement('start-game');
@@ -101,6 +101,7 @@ export class CSapper implements IGame {
       this._colors = this.uiInstance.getColors;
 
       this.contextInstance.init(this.settings.canvasSize, this.settings.devicePixelRatio);
+      this.timerInstance.init({ interval: 1000 });
     }
 
     /** Initializes game engine after the DOM has loaded */
@@ -147,15 +148,11 @@ export class CSapper implements IGame {
 
     /** Start timer for counting the level time (in seconds) */
     private _startTimer(): void {
-      let seconds = 0;
-
-      // display the current time above the field
-      this._timerContainer.textContent = String(seconds++);
-
-      // update the timer once per second
-      this._timerInterval = setInterval(() => {
-        this._timerContainer.textContent = String(seconds++);
-      }, 1000);
+      this.timerInstance.start(
+        (iteration) => {
+          this._timerContainer.textContent = String(iteration);
+        },
+      );
     }
 
     /**
@@ -164,10 +161,9 @@ export class CSapper implements IGame {
      * @param isWin - true, if the game ends with a win
      */
     private _stopTimer(isWin: boolean): void {
-      clearInterval(this._timerInterval);
+      const currentTime = String(this.timerInstance.stop());
 
       if (isWin) {
-        const currentTime = this._timerContainer.textContent;
         const currentLevel = this.storageInstance.get('level');
         const bestTimeStorageName = `best-time-${currentLevel}`;
         const bestTime = this.storageInstance.get(bestTimeStorageName);
@@ -179,7 +175,7 @@ export class CSapper implements IGame {
         if (bestTime && Number(bestTime) < Number(currentTime)) {
           time = bestTime;
         } else {
-          time = (currentTime as string);
+          time = currentTime;
         }
 
         this.storageInstance.save({

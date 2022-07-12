@@ -13,6 +13,7 @@ import './engine/dom-register';
 import './engine/math-register';
 import './engine/source-register';
 import './engine/storage-register';
+import './engine/timer-register';
 
 container.registerSingleton<Window>(() => window);
 container.registerSingleton<Math>(() => Math);
