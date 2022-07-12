@@ -135,8 +135,8 @@ export class CSapper implements IGame {
       this._cellPixelsSize = this._system.pixelsCountInCell;
 
       // display bombs left and timer above the field
-      this._leftBombContainer.textContent = this._system.bombLeft.toString();
-      this._timerContainer.textContent = '0';
+      this.domInstance.setText(this._leftBombContainer, String(this._system.bombLeft));
+      this.domInstance.setText(this._timerContainer, '0');
 
       this._changeVisibilityElements();
       this._makeInitialFill();
@@ -150,7 +150,7 @@ export class CSapper implements IGame {
     private _startTimer(): void {
       this.timerInstance.start(
         (iteration) => {
-          this._timerContainer.textContent = String(iteration);
+          this.domInstance.setText(this._timerContainer, String(iteration));
         },
       );
     }
@@ -170,7 +170,7 @@ export class CSapper implements IGame {
         let time = '';
 
         // display current time on the finish screen
-        this._currentTimeContainer.textContent = currentTime;
+        this.domInstance.setText(this._currentTimeContainer, currentTime);
 
         if (bestTime && Number(bestTime) < Number(currentTime)) {
           time = bestTime;
@@ -184,7 +184,7 @@ export class CSapper implements IGame {
         });
 
         // display best time on the finish screen
-        this._bestTimeContainer.textContent = time;
+        this.domInstance.setText(this._bestTimeContainer, time);
       }
     }
 
@@ -213,7 +213,8 @@ export class CSapper implements IGame {
       // if the level was passed earlier, then display its best time on the start screen
       if (bestTime) {
         this._levelTime.style.display = 'block';
-        this._bestLevelTime.textContent = bestTime;
+
+        this.domInstance.setText(this._bestLevelTime, bestTime);
       } else {
         this._levelTime.style.display = 'none';
       }
@@ -421,7 +422,7 @@ export class CSapper implements IGame {
 
       this._system.bombLeft = this._system.bombLeft - 1;
       // displaying the number of remaining bombs over the field
-      this._leftBombContainer.textContent = this._system.bombLeft.toString();
+      this.domInstance.setText(this._leftBombContainer, String(this._system.bombLeft));
 
       if (cell.hasBomb) {
         this._countCorrectlySelectedBombs++;
@@ -454,7 +455,7 @@ export class CSapper implements IGame {
 
       this._system.bombLeft = this._system.bombLeft + 1;
       // displaying the number of remaining bombs over the field
-      this._leftBombContainer.textContent = this._system.bombLeft.toString();
+      this.domInstance.setText(this._leftBombContainer, String(this._system.bombLeft));
 
       if (cell.hasBomb) {
         this._countCorrectlySelectedBombs--;
