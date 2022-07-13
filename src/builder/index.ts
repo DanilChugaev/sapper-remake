@@ -1,6 +1,6 @@
 import { IMath } from 'just-engine/src/math/types';
 
-import { TComplexity, TComplexityList, TGameSettings } from 'settings/types';
+import { TComplexity, IComplexityList, TGameSettings } from 'settings/types';
 import { TMapStructure, IBuilder } from './types';
 import { AREA_STRUCTURE, COUNT_OF_CELLS_AROUND_CENTRAL } from './constants';
 
@@ -44,7 +44,7 @@ export class CBuilder implements IBuilder {
      *
      * @param levels - list of possible levels of difficulty of the game
      */
-    private _getSelectedLevel(levels: TComplexityList): TComplexity {
+    private _getSelectedLevel(levels: IComplexityList): TComplexity {
       let selectedLevel: TComplexity = {
         bombCount: 0,
         selected: false,

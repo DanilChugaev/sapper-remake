@@ -1,5 +1,5 @@
 import { TGameSettings } from './types';
-import { levels } from './levels';
+import { LEVELS } from './constants';
 
 /** Basic game settings */
 const settings: TGameSettings = {
@@ -10,7 +10,7 @@ const settings: TGameSettings = {
   devicePixelRatio: 1,
 
   /** List of game difficulty levels */
-  levels,
+  levels: LEVELS,
 };
 
 /** Small hardcode for 13 inch display */

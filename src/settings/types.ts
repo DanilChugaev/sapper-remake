@@ -12,22 +12,19 @@ export type TComplexity = {
 
 /**
  * List of possible levels of difficulty of the game
- *
- * @example
- *  - beginner
- *  - easy
- *  - medium
- *  - hard
- *  - huge
- *  - extreme
  */
-export type TComplexityList = {
-    [key: string]: TComplexity,
-};
+export interface IComplexityList {
+    beginner: TComplexity;
+    easy: TComplexity;
+    medium: TComplexity;
+    hard: TComplexity;
+    huge: TComplexity;
+    extreme: TComplexity;
+}
 
 /** Basic game settings */
 export type TGameSettings = {
     canvasSize: TPixelsAmount;
     devicePixelRatio: number;
-    levels: TComplexityList;
+    levels: IComplexityList;
 };

@@ -1,7 +1,7 @@
-import { TComplexityList } from './types';
+import { IComplexityList } from './types';
 
 /** List of game difficulty levels */
-export const levels: TComplexityList = {
+export const LEVELS: IComplexityList = {
   beginner: {
     bombCount: 10,
     fieldSize: 20,
