@@ -1,15 +1,15 @@
 import { TGameSettings } from 'settings/types';
 
 /** Structure of the field of the selected level of difficulty */
-export type TMapStructure = {
-    pixelsCountInCell: number,
-    bombCount: number,
-    bombLeft: number,
-    usedCells: number,
-    cells: any, // TODO: fix type
-    bombPositions: TBombPositions,
-    fieldSize: number,
-};
+export interface IMapStructure {
+    pixelsCountInCell: number;
+    bombCount: number;
+    bombLeft: number;
+    usedCells: number;
+    cells: Record<string, Record<string, TCell>>; // TODO: fix type
+    bombPositions: TBombPositions;
+    fieldSize: number;
+}
 
 /** Responsible for creating levels */
 export interface IBuilder {
@@ -18,5 +18,5 @@ export interface IBuilder {
      *
      * @param settings - basic game settings
      */
-    build(settings: TGameSettings): TMapStructure;
+    build(settings: TGameSettings): IMapStructure;
 }

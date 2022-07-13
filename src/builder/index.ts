@@ -1,7 +1,7 @@
 import { IMath } from 'just-engine/src/math/types';
 
 import { TComplexity, IComplexityList, TGameSettings } from 'settings/types';
-import { TMapStructure, IBuilder } from './types';
+import { IMapStructure, IBuilder } from './types';
 import { AREA_STRUCTURE, COUNT_OF_CELLS_AROUND_CENTRAL } from './constants';
 
 /** Class responsible for creating levels based on levels settings */
@@ -27,7 +27,7 @@ export class CBuilder implements IBuilder {
      *
      * @param settings - basic game settings
      */
-    public build(settings: TGameSettings): TMapStructure {
+    public build(settings: TGameSettings): IMapStructure {
       const { fieldSize, bombCount } = this._getSelectedLevel(settings.levels);
 
       this._fieldSize = fieldSize;
@@ -61,8 +61,8 @@ export class CBuilder implements IBuilder {
     }
 
     /** Generates the field structure for the selected difficulty level */
-    private _generateMapStructure(): TMapStructure {
-      const mapStructure: TMapStructure = {
+    private _generateMapStructure(): IMapStructure {
+      const mapStructure: IMapStructure = {
         pixelsCountInCell: this._canvasSize / this._fieldSize,
         bombCount: this._bombCount,
         bombLeft: this._bombCount,

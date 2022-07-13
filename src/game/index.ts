@@ -8,7 +8,7 @@ import { ITimer } from 'just-engine/src/timer/types';
 
 import { IDrawer } from 'drawer/types';
 import { TGameSettings } from 'settings/types';
-import { TMapStructure, IBuilder } from 'builder/types';
+import { IMapStructure, IBuilder } from 'builder/types';
 import { ERROR_COLORS_ACCESS_MESSAGE } from 'drawer/constants';
 
 import { IGame } from './types';
@@ -53,7 +53,7 @@ export class CSapper implements IGame {
     private _bestTimeContainer: HTMLElement;
 
     /** Structure of the field of the selected level of difficulty */
-    private _system: Nullable<TMapStructure> = null;
+    private _system: Nullable<IMapStructure> = null;
 
     /** Cell size in pixels */
     private _cellPixelsSize: TPixelsAmount = 0;
@@ -303,8 +303,8 @@ export class CSapper implements IGame {
      * @param offsetY - offset of the mouse cursor along the Y axis from the edge of the canvas
      */
     private _getCell(offsetX: number, offsetY: number): TCell {
-      const x = this.mathInstance.getFloorNumber(offsetX / (this._system as TMapStructure).pixelsCountInCell);
-      const y = this.mathInstance.getFloorNumber(offsetY / (this._system as TMapStructure).pixelsCountInCell);
+      const x = this.mathInstance.getFloorNumber(offsetX / (this._system as IMapStructure).pixelsCountInCell);
+      const y = this.mathInstance.getFloorNumber(offsetY / (this._system as IMapStructure).pixelsCountInCell);
 
       return this._system?.cells[y][x];
     }
@@ -391,7 +391,7 @@ export class CSapper implements IGame {
 
     /** Open all bombs on the field */
     private _openAllBombs(): void {
-      const { bombPositions, cells, fieldSize } = (this._system as TMapStructure);
+      const { bombPositions, cells, fieldSize } = (this._system as IMapStructure);
 
       for (let y = 0; y < Object.keys(cells).length; y++) {
         for (let x = 0; x < Object.keys(cells[y]).length; x++) {
