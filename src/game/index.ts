@@ -12,7 +12,7 @@ import { TMapStructure, IBuilder } from 'builder/types';
 import { ERROR_COLORS_ACCESS_MESSAGE } from 'drawer/constants';
 
 import { IGame } from './types';
-import { ERROR_SYSTEM_ACCESS_MESSAGE } from './constants';
+import { ERROR_SYSTEM_ACCESS_MESSAGE, DEFAULT_GAME_LEVEL } from './constants';
 
 /** The main class of the game */
 export class CSapper implements IGame {
@@ -107,7 +107,7 @@ export class CSapper implements IGame {
     /** Initializes game engine after the DOM has loaded */
     public init(): void {
       this.domInstance.afterLoad(() => {
-        const selectedLevel = this.storageInstance.get('level') || 'easy'; // TODO: 'easy' as default level in constants
+        const selectedLevel = this.storageInstance.get('level') || DEFAULT_GAME_LEVEL;
 
         /** if we have previously selected the level, then set it again */
         this._changeLevelInSettings(selectedLevel);
