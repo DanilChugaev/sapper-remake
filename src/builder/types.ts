@@ -6,7 +6,7 @@ export interface IMapStructure {
     bombCount: number;
     bombLeft: number;
     usedCells: number;
-    cells: Record<string, Record<string, TCell>>; // TODO: fix type
+    cells: Record<string, Record<string, TCell>>;
     bombPositions: TBombPositions;
     fieldSize: number;
 }
