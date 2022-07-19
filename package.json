@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@wessberg/di": "^2.1.0",
-    "just-engine": "^0.0.5"
+    "just-engine": "^0.0.6"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.9",
