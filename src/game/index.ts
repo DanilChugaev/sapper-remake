@@ -86,18 +86,18 @@ export class CSapper implements IGame {
         private uiInstance: IUI,
         private timerInstance: ITimer,
     ) {
-      this._select = <HTMLSelectElement> domInstance.getElement('select-level');
-      this._startGameButton = <HTMLButtonElement> domInstance.getElement('start-game');
-      this._levelTime = <HTMLElement> domInstance.getElement('level-time');
-      this._bestLevelTime = <HTMLElement> domInstance.getElement('best-level-time');
-      this._canvas = <HTMLCanvasElement> domInstance.getElement('canvas');
-      this._gameContainer = <HTMLElement> domInstance.getElement('game-container');
-      this._resultContainer = <HTMLElement> domInstance.getElement('result-container');
-      this._winContainer = <HTMLElement> domInstance.getElement('win-container');
-      this._leftBombContainer = <HTMLElement> domInstance.getElement('left-bomb');
-      this._timerContainer = <HTMLElement> domInstance.getElement('timer');
-      this._currentTimeContainer = <HTMLElement> domInstance.getElement('current-time-container');
-      this._bestTimeContainer = <HTMLElement> domInstance.getElement('best-time-container');
+      this._select = <HTMLSelectElement> domInstance.getElementById('select-level');
+      this._startGameButton = <HTMLButtonElement> domInstance.getElementById('start-game');
+      this._levelTime = <HTMLElement> domInstance.getElementById('level-time');
+      this._bestLevelTime = <HTMLElement> domInstance.getElementById('best-level-time');
+      this._canvas = <HTMLCanvasElement> domInstance.getElementById('canvas');
+      this._gameContainer = <HTMLElement> domInstance.getElementById('game-container');
+      this._resultContainer = <HTMLElement> domInstance.getElementById('result-container');
+      this._winContainer = <HTMLElement> domInstance.getElementById('win-container');
+      this._leftBombContainer = <HTMLElement> domInstance.getElementById('left-bomb');
+      this._timerContainer = <HTMLElement> domInstance.getElementById('timer');
+      this._currentTimeContainer = <HTMLElement> domInstance.getElementById('current-time-container');
+      this._bestTimeContainer = <HTMLElement> domInstance.getElementById('best-time-container');
       this._colors = this.uiInstance.getColors;
 
       this.contextInstance.init(this.settings.canvasSize, this.settings.devicePixelRatio);
@@ -123,9 +123,8 @@ export class CSapper implements IGame {
           this._select.appendChild(option);
         }
 
-        this._select.addEventListener('change', this._changeLevel.bind(this), false);
-
-        this._startGameButton.addEventListener('click', this._start.bind(this), false);
+        this.domInstance.on(this._select, 'change', this._changeLevel.bind(this));
+        this.domInstance.on(this._startGameButton, 'click', this._start.bind(this));
       });
     }
 
