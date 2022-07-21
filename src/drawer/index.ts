@@ -40,8 +40,8 @@ export class CDrawer implements IDrawer {
       throw new Error(ERROR_CONTEXT_ACCESS_MESSAGE);
     }
 
-    this._bomb = this.sourceInstance.getImage('../img//bomb.png');
-    this._flag = this.sourceInstance.getImage('../img//flag.png');
+    this._bomb = this.sourceInstance.getImage('../images/bomb.png');
+    this._flag = this.sourceInstance.getImage('../images/flag.png');
     this._colors = this.uiInstance.getColors;
   }
 

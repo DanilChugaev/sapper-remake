@@ -74,14 +74,9 @@ export default [
   /** copy files and folders */
   copy({
     targets: [
-      // TODO: поправить в движке указание пути
       {
         src: `${APP_DIR}/images/*`,
         dest: `${DIST_DIR}/images`,
-      },
-      {
-        src: `${APP_DIR}/img/*`,
-        dest: `${DIST_DIR}/img`,
       },
     ],
   }),
