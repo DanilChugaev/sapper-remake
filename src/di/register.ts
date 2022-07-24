@@ -5,6 +5,7 @@ import 'builder/di-register';
 import 'drawer/di-register';
 import 'settings/di-register';
 import 'game/di-register';
+import 'menu/di-register';
 
 // engine register
 import './engine/ui-register';

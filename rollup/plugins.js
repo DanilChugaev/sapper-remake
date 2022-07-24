@@ -51,6 +51,7 @@ export default [
       { find: 'drawer', replacement: `${APP_DIR}/drawer` },
       { find: 'builder', replacement: `${APP_DIR}/builder` },
       { find: 'game', replacement: `${APP_DIR}/game` },
+      { find: 'menu', replacement: `${APP_DIR}/menu` },
     ],
   }),
 

@@ -22,6 +22,9 @@
       "game/*": [
         "./src/game/*"
       ],
+      "menu/*": [
+        "./src/menu/*"
+      ],
     }
   }
 }

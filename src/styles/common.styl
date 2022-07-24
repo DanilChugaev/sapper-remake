@@ -1,6 +1,11 @@
 :root
+  // sizes
+  --header-height: 60px;
   // gaps
-  --indent: 5px
+  --mini-indent: 3px
+  --default-indent: 5px
+  --double-indent: calc(2 * var(--default-indent))
+  --big-indent: calc(10 * var(--default-indent))
   --outer-indent: -1px
   // borders
   --border-radius: 6px
@@ -29,11 +34,3 @@
 
 html, body
   height: 100vh
-
-body
-  display: flex
-  flex-direction: column
-  justify-content: center
-  align-items: center
-  padding: calc(4 * var(--indent))
-  background-color: var(--main-bg-color)

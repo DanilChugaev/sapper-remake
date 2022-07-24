@@ -8,45 +8,60 @@
 
   <link rel="stylesheet" href="./index.css">
 </head>
-<body>
-  <h1 class="title">Сапер</h1>
-  <button type="button" id="start-game" class="button start-game">Играть</button>
-  <select name="level" id="select-level" class="select-level"></select>
-  <div class="best-level-time" id="level-time">
-    <span>Лушее время уровня:</span> <span id="best-level-time"></span> <span>секунд</span>
-  </div>
+<body class="page" id="page">
+  <header class="header page__header">
+    <div class="header__bomb-container visible-in-game">
+      <svg class="header__bomb" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="10" cy="14" r="7"/><line x1="16" y1="8" x2="17" y2="7"/><line x1="20" y1="4" x2="21" y2="3"/><line x1="16" y1="4" x2="16" y2="3"/><line x1="20" y1="8" x2="21" y2="8"/><line x1="6.2" y1="13" x2="6.5" y2="12"/><line x1="6" y1="14.5" x2="6" y2="14"/><line x1="7" y1="11.3" x2="8" y2="10.5"/></svg>
+
+      <span class="header__counting">
+        <span id="left-bomb"></span>
+      </span>
+    </div>
+
+    <h1 class="header__title">Сапер</h1>
+
+    <div class="header__time-container visible-in-game">
+      <svg class="header__time" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+
+      <span class="header__counting">
+        <span id="timer"></span><span>c</span>
+      </span>
+    </div>
+  </header>
+
+
+  <main class="content page__content">
+    <select name="level" id="select-level" class="select-level"></select>
+    <button type="button" id="start-game" class="button start-game">Играть</button>
+    
+    <div class="best-level-time" id="level-time">
+      <span>Лушее время уровня:</span> <span id="best-level-time"></span> <span>секунд</span>
+    </div>
+    
+    <div id="game-container" class="game">
+      <div class="canvas-container">
+        <canvas id="canvas" class="canvas"></canvas>
   
-  <div id="game-container" class="game">
-    <div class="game__count-bomb">
-      <span>бомб:</span> <span id="left-bomb"></span>
-    </div>
-
-    <div class="game__timer">
-      <span>время:</span> <span id="timer"></span><span>c</span>
-    </div>
-
-    <div class="canvas-container">
-      <canvas id="canvas" class="canvas"></canvas>
-
-      <div class="hints">
-        <div class="hints__item" title="левая кнопка мыши">открыть - ЛКМ</div>
-        <div class="hints__item" title="правая кнопка мыши">флаг - ПКМ</div>
-      </div>
-
-      <div class="result-container" id="result-container">
-        <div class="win-container" id="win-container">
-          <h2 class="win-container__title">Победа!</h2>
-          <div>
-            <span>Время прохождения:</span> <span id="current-time-container"></span> <span>секунд</span>
-          </div>
-          <div>
-            <span>Лушее время уровня:</span> <span id="best-time-container"></span> <span>секунд</span>
-          </div>
+        <div class="hints">
+          <div class="hints__item" title="левая кнопка мыши">открыть - ЛКМ</div>
+          <div class="hints__item" title="правая кнопка мыши">флаг - ПКМ</div>
         </div>
-        <button type="button" onclick="location.reload()" class="button restart-game">Играть заново</button>
+  
+        <div class="result-container" id="result-container">
+          <div class="win-container" id="win-container">
+            <h2 class="win-container__title">Победа!</h2>
+            <div>
+              <span>Время прохождения:</span> <span id="current-time-container"></span> <span>секунд</span>
+            </div>
+            <div>
+              <span>Лушее время уровня:</span> <span id="best-time-container"></span> <span>секунд</span>
+            </div>
+          </div>
+          <button type="button" onclick="location.reload()" class="button restart-game">Играть заново</button>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
   <script src="./index.ts" type="module"></script>
 </body>

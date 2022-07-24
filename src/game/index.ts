@@ -10,9 +10,11 @@ import { IDrawer } from 'drawer/types';
 import { TGameSettings } from 'settings/types';
 import { IMapStructure, IBuilder } from 'builder/types';
 import { ERROR_COLORS_ACCESS_MESSAGE } from 'drawer/constants';
+import { SELECT_ID } from 'menu/constants';
 
 import { IGame } from './types';
 import { ERROR_SYSTEM_ACCESS_MESSAGE, DEFAULT_GAME_LEVEL } from './constants';
+import { IMenu } from '../menu/types';
 
 /** The main class of the game */
 export class CSapper implements IGame {
@@ -27,12 +29,6 @@ export class CSapper implements IGame {
 
     /** To display best level time before the game */
     private _bestLevelTime: HTMLElement;
-
-    /** Element on which the game will be drawn */
-    private _canvas: HTMLCanvasElement;
-
-    /** Container for fields and other containers */
-    private _gameContainer: HTMLElement;
 
     /** To display the results of the game */
     private _resultContainer: HTMLElement;
@@ -74,6 +70,7 @@ export class CSapper implements IGame {
      * @param storageInstance - long-term storage of game data
      * @param uiInstance - to control the UI in the game
      * @param timerInstance - to control the UI in the game
+     * @param menuInstance - __
      */
     constructor(
         private settings: TGameSettings,
@@ -85,13 +82,12 @@ export class CSapper implements IGame {
         private storageInstance: IStorage,
         private uiInstance: IUI,
         private timerInstance: ITimer,
+        private menuInstance: IMenu,
     ) {
-      this._select = <HTMLSelectElement> domInstance.getElementById('select-level');
+      this._select = <HTMLSelectElement> domInstance.getElementById(SELECT_ID);
       this._startGameButton = <HTMLButtonElement> domInstance.getElementById('start-game');
       this._levelTime = <HTMLElement> domInstance.getElementById('level-time');
       this._bestLevelTime = <HTMLElement> domInstance.getElementById('best-level-time');
-      this._canvas = <HTMLCanvasElement> domInstance.getElementById('canvas');
-      this._gameContainer = <HTMLElement> domInstance.getElementById('game-container');
       this._resultContainer = <HTMLElement> domInstance.getElementById('result-container');
       this._winContainer = <HTMLElement> domInstance.getElementById('win-container');
       this._leftBombContainer = <HTMLElement> domInstance.getElementById('left-bomb');
@@ -112,16 +108,7 @@ export class CSapper implements IGame {
         /** if we have previously selected the level, then set it again */
         this._changeLevelInSettings(selectedLevel);
 
-        for (const key in this.settings.levels) {
-          const option = <HTMLOptionElement> this.domInstance.createElement('option', {
-            textContent: key,
-            value: key,
-            selected: this.settings.levels[key].selected,
-          });
-
-          /** substitute the selection options into the select from the settings */
-          this._select.appendChild(option);
-        }
+        this.menuInstance.initListForSelectComplexity(this.settings.levels);
 
         this.domInstance.on(this._select, 'change', this._changeLevel.bind(this));
         this.domInstance.on(this._startGameButton, 'click', this._start.bind(this));
@@ -136,6 +123,7 @@ export class CSapper implements IGame {
       // display bombs left and timer above the field
       this.domInstance.text(this._leftBombContainer, String(this._system.bombLeft));
       this.domInstance.text(this._timerContainer, '0');
+      this.menuInstance.start();
 
       this._changeVisibilityElements();
       this._makeInitialFill();
@@ -228,10 +216,7 @@ export class CSapper implements IGame {
     /** Changes visibility of game elements on the page after start of the game */
     private _changeVisibilityElements(): void {
       this._startGameButton.style.display = 'none';
-      this._select.style.display = 'none';
       this._levelTime.style.display = 'none';
-      this._gameContainer.style.display = 'flex';
-      this._canvas.style.display = 'block';
     }
 
     /** Fills the entire canvas by default with the default color */
