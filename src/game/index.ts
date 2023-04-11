@@ -11,10 +11,23 @@ import { TGameSettings } from 'settings/types';
 import { IMapStructure, IBuilder } from 'builder/types';
 import { ERROR_COLORS_ACCESS_MESSAGE } from 'drawer/constants';
 import { SELECT_ID } from 'menu/constants';
+import { IMenu } from 'menu/types';
 
 import { IGame } from './types';
-import { ERROR_SYSTEM_ACCESS_MESSAGE, DEFAULT_GAME_LEVEL } from './constants';
-import { IMenu } from '../menu/types';
+import {
+  ERROR_SYSTEM_ACCESS_MESSAGE,
+  DEFAULT_GAME_LEVEL,
+  START_BUTTON_ID,
+  LEVEL_TIME_CONTAINER_ID,
+  BEST_LEVEL_TIME_CONTAINER_ID,
+  RESULT_CONTAINER_ID,
+  WIN_CONTAINER_ID,
+  LEFT_BOMB_CONTAINER_ID,
+  TIMER_INTERVAL,
+  TIMER_CONTAINER_ID,
+  CURRENT_TIME_CONTAINER_ID,
+  BEST_TIME_CONTAINER_ID,
+} from './constants';
 
 /** The main class of the game */
 export class CSapper implements IGame {
@@ -70,7 +83,7 @@ export class CSapper implements IGame {
      * @param storageInstance - long-term storage of game data
      * @param uiInstance - to control the UI in the game
      * @param timerInstance - to control the UI in the game
-     * @param menuInstance - __
+     * @param menuInstance - for manage menu items
      */
     constructor(
         private settings: TGameSettings,
@@ -85,19 +98,19 @@ export class CSapper implements IGame {
         private menuInstance: IMenu,
     ) {
       this._select = <HTMLSelectElement> domInstance.getElementById(SELECT_ID);
-      this._startGameButton = <HTMLButtonElement> domInstance.getElementById('start-game');
-      this._levelTime = <HTMLElement> domInstance.getElementById('level-time');
-      this._bestLevelTime = <HTMLElement> domInstance.getElementById('best-level-time');
-      this._resultContainer = <HTMLElement> domInstance.getElementById('result-container');
-      this._winContainer = <HTMLElement> domInstance.getElementById('win-container');
-      this._leftBombContainer = <HTMLElement> domInstance.getElementById('left-bomb');
-      this._timerContainer = <HTMLElement> domInstance.getElementById('timer');
-      this._currentTimeContainer = <HTMLElement> domInstance.getElementById('current-time-container');
-      this._bestTimeContainer = <HTMLElement> domInstance.getElementById('best-time-container');
+      this._startGameButton = <HTMLButtonElement> domInstance.getElementById(START_BUTTON_ID);
+      this._levelTime = <HTMLElement> domInstance.getElementById(LEVEL_TIME_CONTAINER_ID);
+      this._bestLevelTime = <HTMLElement> domInstance.getElementById(BEST_LEVEL_TIME_CONTAINER_ID);
+      this._resultContainer = <HTMLElement> domInstance.getElementById(RESULT_CONTAINER_ID);
+      this._winContainer = <HTMLElement> domInstance.getElementById(WIN_CONTAINER_ID);
+      this._leftBombContainer = <HTMLElement> domInstance.getElementById(LEFT_BOMB_CONTAINER_ID);
+      this._timerContainer = <HTMLElement> domInstance.getElementById(TIMER_CONTAINER_ID);
+      this._currentTimeContainer = <HTMLElement> domInstance.getElementById(CURRENT_TIME_CONTAINER_ID);
+      this._bestTimeContainer = <HTMLElement> domInstance.getElementById(BEST_TIME_CONTAINER_ID);
       this._colors = this.uiInstance.getColors;
 
       this.contextInstance.init(this.settings.canvasSize, this.settings.devicePixelRatio);
-      this.timerInstance.init({ interval: 1000 });
+      this.timerInstance.init({ interval: TIMER_INTERVAL });
     }
 
     /** Initializes game engine after the DOM has loaded */
